@@ -3,6 +3,7 @@ import { forkJoin } from 'rxjs';
 import { Character,CharacterResponse } from '../interface/characters';
 import { CharactersService } from '../service/characters.service';
 import { SharedService } from '../../service/shared-service.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'characters',
   templateUrl: './cards-characters.component.html',
@@ -12,13 +13,14 @@ export class CardsCharactersComponent implements OnInit {
   characters: Character[] = [];
   selectedCharacters = ['Goku', 'Vegeta', 'Piccolo', 'Freezer', 'Gohan'];
 
-  constructor(
-    private charactersService: CharactersService,
-    public sharedService: SharedService
-  ) {}
+  constructor(private charactersService: CharactersService,public sharedService: SharedService,private routing:Router ) {}
 
   ngOnInit(): void {
     this.getCharacters();
+  }
+
+  goToPlanets(){
+    this.routing.navigate(['/planets'])
   }
 
   getCharacters(): void {

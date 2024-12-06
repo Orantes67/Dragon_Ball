@@ -1,9 +1,21 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../enviroments/enviroment'; // Corregido el nombre del archivo de entorno
 
 @Injectable({
   providedIn: 'root'
 })
 export class CharactersService {
 
-  constructor() { }
+  private apiUrl = `${environment.apiUrl}/api/characters`;
+
+  constructor(private http: HttpClient) { }
+
+  getCharacters(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
+  }
+  getCharacterById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
 }

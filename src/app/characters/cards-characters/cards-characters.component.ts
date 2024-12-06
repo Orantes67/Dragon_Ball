@@ -1,34 +1,83 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs'; 
+import { Character,CharacterResponse } from '../interface/characters';
 import { CharactersService } from '../service/characters.service';
+import { SharedService } from '../../service/shared-service.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'characters',
   templateUrl: './cards-characters.component.html',
   styleUrls: ['./cards-characters.component.css']
 })
 export class CardsCharactersComponent implements OnInit {
-  characters: any[] = []; // Todos los personajes obtenidos de la API
-  filteredCharacters: any[] = []; // Solo los personajes que queremos mostrar
-  selectedCharacters = ['Goku', 'Vegeta', 'Piccolo', 'Freezer', 'Gohan']; // Personajes a filtrar
+  characters: Character[] = [];
+  selectedCharacters = ['Goku', 'Vegeta', 'Piccolo', 'Freezer', 'Gohan'];
 
-  constructor(private charactersService: CharactersService) {}
+  constructor(private charactersService: CharactersService,public sharedService: SharedService,private routing:Router ) {}
 
   ngOnInit(): void {
     this.getCharacters();
   }
 
+
+
+  goToPlanets(){
+    this.routing.navigate(['/planets'])
+  }
+
+
+  getTranformaciones(){
+    this.routing.navigate(['/transformaciones'])
+  }
+
   getCharacters(): void {
     this.charactersService.getCharacters().subscribe({
-      next: (data) => {
-        this.characters = data.items; // Asegúrate de acceder a 'items'
-        this.filterCharacters();
+      next: (data: CharacterResponse) => {
+        console.log('Respuesta completa de la API (characters):', data); 
+
+        if (!data || !Array.isArray(data.items)) {
+          console.error('La respuesta de la API no es válida:', data);
+          return;
+        }
+
+        const filteredCharacters = data.items.filter(character =>
+          this.selectedCharacters.some(selected =>
+            character.name.toLowerCase() === selected.toLowerCase()
+          )
+        );
+
+        console.log('Personajes filtrados (básicos):', filteredCharacters);
+
+           this.getCharacterDetails(filteredCharacters);
       },
-      error: (err) => console.error(err),
+      error: (err) => {
+        console.error('Error al obtener personajes:', err);
+        this.characters = [];
+      },
+    });
+  }
+
+  getCharacterDetails(filteredCharacters: Character[]): void {
+    const requests = filteredCharacters.map(character =>
+      this.charactersService.getCharacterById(character.id)
+    );
+  
+    forkJoin(requests).subscribe({
+      next: (detailedCharacters) => {
+        console.log('Detalles completos de los personajes:', detailedCharacters);
+  
+        // Aseguramos que cada personaje tiene su planeta de origen accesible
+        this.characters = detailedCharacters.map(character => ({
+          ...character,
+          origin: character.originPlanet?.name.toLowerCase() || '',
+        }));
+  
+        this.sharedService.setFilteredCharacters(this.characters);
+      },
+      error: (err) => {
+        console.error('Error al obtener detalles de los personajes:', err);
+      },
     });
   }
   
-  filterCharacters(): void {
-    this.filteredCharacters = this.characters.filter(character =>
-      this.selectedCharacters.includes(character.name)
-    );
-  }
 }

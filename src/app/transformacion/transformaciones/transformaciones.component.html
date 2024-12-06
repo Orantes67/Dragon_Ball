@@ -1,1 +1,16 @@
-<p>transformaciones works!</p>
+<div class="transformations-container">
+  <h1>Transformaciones</h1>
+  <div *ngIf="transformations.length > 0; else noData">
+    <div class="transformation-card" *ngFor="let transformation of transformations">
+      <img [src]="transformation.image" [alt]="transformation.name" class="transformation-image" />
+      <div class="transformation-details">
+        <h2>{{ transformation.name }}</h2>
+        <p><strong>Ki:</strong> {{ transformation.ki }}</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <p>No se encontraron transformaciones.</p>
+  </ng-template>
+</div>

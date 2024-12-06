@@ -19,8 +19,15 @@ export class CardsCharactersComponent implements OnInit {
     this.getCharacters();
   }
 
+
+
   goToPlanets(){
     this.routing.navigate(['/planets'])
+  }
+
+
+  getTranformaciones(){
+    this.routing.navigate(['/transformaciones'])
   }
 
   getCharacters(): void {

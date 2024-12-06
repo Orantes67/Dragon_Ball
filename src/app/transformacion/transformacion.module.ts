@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TransformacionesComponent } from './transformaciones/transformaciones.component';
+import { TransformationsComponent } from './transformaciones/transformaciones.component';
+
 @NgModule({
-  declarations: [],
+  declarations: [
+    TransformationsComponent
+  ],
   imports: [
     CommonModule
+  ],
+  exports:[
+    TransformationsComponent
   ]
 })
 export class TransformacionModule { }

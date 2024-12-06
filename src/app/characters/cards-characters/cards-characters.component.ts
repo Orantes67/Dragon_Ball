@@ -21,6 +21,17 @@ export class CardsCharactersComponent implements OnInit {
     this.getCharacters();
   }
 
+<<<<<<< Updated upstream
+=======
+  goToPlanets(){
+    this.routing.navigate(['/planets'])
+  }
+
+  getTranformaciones(){
+    this.routing.navigate(['/transformaciones'])
+  }
+
+>>>>>>> Stashed changes
   getCharacters(): void {
     this.charactersService.getCharacters().subscribe({
       next: (data: CharacterResponse) => {

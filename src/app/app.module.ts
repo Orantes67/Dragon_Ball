@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CharactersModule } from "./characters/characters.module";
 import { PlanetsModule } from "./planet/planets.module";
+import { TransformacionModule } from './transformacion/transformacion.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { PlanetsModule } from "./planet/planets.module";
     AppRoutingModule,
     CharactersModule,
     HttpClientModule,
-    PlanetsModule
+    PlanetsModule,
+    TransformacionModule
 ],
   providers: [],
   bootstrap: [AppComponent]
